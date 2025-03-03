@@ -1,19 +1,22 @@
 name: Release Creation
 
-on: 
-  release:
-    types: [published]
+on:
+  push:
+    tags:
+      - '*.*.*' # Run when tag matches semantic version like 1.0.0
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # Need full history for changelog
 
-    # get part of the tag after the `v`
-    - name: Extract tag version number
+    # Extract version from tag
+    - name: Set version
       id: get_version
-      uses: battila7/get-version-action@v2
+      run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
     # Generate release notes
     - name: Generate Release Notes
@@ -39,25 +42,25 @@ jobs:
       with:
         files: 'module.json'
       env:
-        version: ${{steps.get_version.outputs.version-without-v}}
+        version: ${{steps.get_version.outputs.version}}
         url: https://github.com/${{github.repository}}
         manifest: https://github.com/${{github.repository}}/releases/latest/download/module.json
-        download: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/module.zip
+        download: https://github.com/${{github.repository}}/releases/download/${{github.ref_name}}/module.zip
 
     # Create a zip file with all files required by the module to add to the release
     - run: zip -r ./module.zip module.json LICENSE styles/ scripts/ templates/ languages/
 
     # Create a release for this specific version
-    - name: Update Release with Files
+    - name: Create Release
       id: create_version_release
       uses: ncipollo/release-action@v1
       with:
-        allowUpdates: true # Set this to false if you want to prevent updating existing releases
-        name: ${{ github.event.release.name }}
+        allowUpdates: true
+        name: Release ${{ steps.get_version.outputs.version }}
         draft: false
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: './module.json, ./module.zip'
-        tag: ${{ github.event.release.tag_name }}
+        tag: ${{ github.ref_name }}
         body: ${{ env.RELEASE_NOTES }}
 
     # Publish to Foundry VTT
@@ -67,6 +70,6 @@ jobs:
           https://api.foundryvtt.com/_api/packages/release_version \
           -H "Authorization: Bearer ${{ secrets.FOUNDRY_API_KEY }}" \
           -F "id=${{ secrets.PACKAGE_ID }}" \
-          -F "version=${{steps.get_version.outputs.version-without-v}}" \
+          -F "version=${{steps.get_version.outputs.version}}" \
           -F "manifest=@module.json" \
           -F "zip=@module.zip"
