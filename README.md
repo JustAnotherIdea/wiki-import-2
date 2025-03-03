@@ -1,15 +1,6 @@
-# Not maintained anymore
+# New maintainer
 
-This project is not maintained anymore. Feel free to fork, fix and publish it on foundry marketplace.
-
-![](https://img.shields.io/badge/Foundry-v0.8.6-informational)
-<!--- Downloads @ Latest Badge -->
-<!--- replace <user>/<repo> with your username/repository -->
-![Latest Release Download Count](https://img.shields.io/github/downloads/rlach/wiki-import/latest/module.zip)
-
-<!--- Forge Bazaar Install % Badge -->
-<!--- replace <your-module-name> with the `name` in your manifest -->
-![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fwiki-import&colorB=4aa94a)
+This is a fork of [rlach's wiki-import](https://github.com/rlach/wiki-import). I will be maintaing it as I have time. Please feel free to open issues so I can address them!
 
 # FoundryVTT Wikipedia to Journal importer
 
