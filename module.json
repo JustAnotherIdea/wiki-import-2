@@ -1,23 +1,21 @@
 {
-  "name": "wiki-import",
-  "title": "Wiki to journal importer",
-  "description": "A simple module which allows users to import wiki articles into Foundry Journal Entries.",
+  "name": "wiki-import-2",
+  "title": "Wiki to journal importer 2",
+  "description": "A fork of rlach's wiki-import which allows users to import wiki articles into Foundry Journal Entries.",
   "version": "This is auto replaced",
   "library": "false",
-  "manifestPlusVersion": "1.0.0",
-  "minimumCoreVersion": "10",
-  "compatibleCoreVersion": "10",
+  "compatibility": {
+    "minimum": "10",
+    "verified": "12"
+  },
   "authors": [
     {
-      "name": "Areinu",
-      "url": "https://github.com/rlach"
+      "name": "JustAnotherIdea",
+      "url": "https://github.com/JustAnotherIdea"
     }
   ],
-  "dependencies": [
+  "relationships": [
 
-  ],
-  "conflicts": [
-    
   ],
   "esmodules": [
     "/scripts/module.js"
