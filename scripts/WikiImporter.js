@@ -1,7 +1,7 @@
 import wtf from "./lib/wtf_wikipedia-client.mjs";
 
 export class WikiImporter {
-  static ID = "wiki-import";
+  static ID = "wiki-import-2";
 
   static log(force, ...args) {
     const shouldLog =
@@ -14,7 +14,7 @@ export class WikiImporter {
   }
 
   static FLAGS = {
-    WIKI_IMPORT: "wiki-import",
+    WIKI_IMPORT: "wiki-import-2",
     DOMAIN: "domain"
   };
 
@@ -224,21 +224,28 @@ function addCustomInfoBoxes() {
 }
 
 export async function downloadImage(image) {
+  // Create the base directory if it doesn't exist
+  try {
+    await FilePicker.browse("data", `wiki-import-2`);
+  } catch (error) {
+    await FilePicker.createDirectory("data", "wiki-import-2");
+  }
+
   if (
-      !(await FilePicker.browse("data", `wiki-import`)).dirs.find(
-          d => d === `wiki-import/${image.data.domain}`
+      !(await FilePicker.browse("data", `wiki-import-2`)).dirs.find(
+          d => d === `wiki-import-2/${image.data.domain}`
       )
   ) {
     await FilePicker.createDirectory(
         "data",
-        `wiki-import/${image.data.domain}`
+        `wiki-import-2/${image.data.domain}`
     );
   }
 
   if (
       !(await FilePicker.browse(
           "data",
-          `wiki-import/${image.data.domain}`
+          `wiki-import-2/${image.data.domain}`
       )).files.find(f => f === image.file())
   ) {
     try {
@@ -246,7 +253,7 @@ export async function downloadImage(image) {
 
       await FilePicker.upload(
           "data",
-          `wiki-import/${image.data.domain}`,
+          `wiki-import-2/${image.data.domain}`,
           new File([await response.blob()], image.file())
       );
     } catch (e) {
@@ -255,7 +262,7 @@ export async function downloadImage(image) {
     }
   }
 
-  return `wiki-import/${image.data.domain}/${image.file()}`;
+  return `wiki-import-2/${image.data.domain}/${image.file()}`;
 }
 
 async function addImages(images) {

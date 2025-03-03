@@ -4,8 +4,8 @@ Hooks.once("init", async () => {
   // Expose WikiImporter globally
   game.WikiImporter = WikiImporter;
 
-  if ((await FilePicker.browse("data", "wiki-import").target) === "") {
-    await FilePicker.createDirectory("data", "wiki-import");
+  if ((await FilePicker.browse("data", "wiki-import-2").target) === "") {
+    await FilePicker.createDirectory("data", "wiki-import-2");
   }
 
   game.settings.register(WikiImporter.ID, WikiImporter.SETTINGS.INFOBOXES, {
@@ -134,7 +134,7 @@ Hooks.on("renderJournalSheet", (app, html, data) => {
     );
 
     let openBtn = $(
-        `<a class="open-wiki-import" title="${title}"><i class="fas fa-file-import"></i>${label}</a>`
+        `<a class="open-wiki-import-2" title="${title}"><i class="fas fa-file-import"></i>${label}</a>`
     );
     openBtn.click(ev => {
       new Dialog({
@@ -153,7 +153,7 @@ Hooks.on("renderJournalSheet", (app, html, data) => {
         <input type='text' name='articleUrl'></input>
       </div>
       <p>${pasteTheSourceLabel}</p>
-      <p class="warning-note">${corsNote} <a target="_blank" href="https://github.com/rlach/wiki-import/wiki/About-CORS">${moreOnCors}</a></p>
+      <p class="warning-note">${corsNote} <a target="_blank" href="https://github.com/JustAnotherIdea/wiki-import-2/wiki/About-CORS">${moreOnCors}</a></p>
       <div class="form-group">
          <label>${wikiSourceLabel}</label>
          <textarea id="wikiSource" name="wikiSource" rows="4" cols="50"></textarea>
@@ -215,7 +215,7 @@ Hooks.on("renderJournalSheet", (app, html, data) => {
     });
     html
         .closest(".app")
-        .find(".open-wiki-import")
+        .find(".open-wiki-import-2")
         .remove();
     let titleElement = html.closest(".app").find(".window-title");
     openBtn.insertAfter(titleElement);
