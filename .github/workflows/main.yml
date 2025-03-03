@@ -66,26 +66,27 @@ jobs:
         tag: ${{ github.ref_name }}
         body: ${{ env.RELEASE_NOTES }}
 
-    # Extract compatibility info from module.json for Foundry API
-    - name: Extract compatibility info
-      id: extract_compatibility
+    # Extract compatibility info and create request JSON for Foundry API
+    - name: Prepare Foundry VTT API request
       run: |
-        COMPATIBILITY=$(jq -r '.compatibility | tojson' module.json)
-        echo "compatibility=$COMPATIBILITY" >> $GITHUB_ENV
+        # Create a JSON file with the request payload
+        cat > foundry_request.json << EOF
+        {
+          "id": "${{ secrets.PACKAGE_ID }}",
+          "release": {
+            "version": "${{steps.get_version.outputs.version}}",
+            "manifest": "https://github.com/${{github.repository}}/releases/download/${{github.ref_name}}/module.json",
+            "notes": "https://github.com/${{github.repository}}/releases/tag/${{github.ref_name}}",
+            "compatibility": $(jq -r '.compatibility' module.json)
+          }
+        }
+        EOF
 
-    # Publish to Foundry VTT using API
+    # Publish to Foundry VTT using API with properly formatted JSON
     - name: Publish to Foundry VTT
       run: |
         curl -X POST \
           https://api.foundryvtt.com/_api/packages/release_version/ \
           -H "Content-Type: application/json" \
           -H "Authorization: ${{ secrets.FOUNDRY_API_KEY }}" \
-          -d '{
-            "id": "${{ secrets.PACKAGE_ID }}",
-            "release": {
-              "version": "${{steps.get_version.outputs.version}}",
-              "manifest": "https://github.com/${{github.repository}}/releases/download/${{github.ref_name}}/module.json",
-              "notes": "https://github.com/${{github.repository}}/releases/tag/${{github.ref_name}}",
-              "compatibility": '"${{ env.compatibility }}"'
-            }
-          }'
+          --data @foundry_request.json
