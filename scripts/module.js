@@ -153,7 +153,7 @@ Hooks.on("renderJournalSheet", (app, html, data) => {
         <input type='text' name='articleUrl'></input>
       </div>
       <p>${pasteTheSourceLabel}</p>
-      <p class="warning-note">${corsNote} <a target="_blank" href="https://github.com/JustAnotherIdea/wiki-import-2/wiki/About-CORS">${moreOnCors}</a></p>
+      <p class="warning-note">${corsNote} <a target="_blank" href="https://github.com/ThreeHats/wiki-import-2/wiki/About-CORS">${moreOnCors}</a></p>
       <div class="form-group">
          <label>${wikiSourceLabel}</label>
          <textarea id="wikiSource" name="wikiSource" rows="4" cols="50"></textarea>
